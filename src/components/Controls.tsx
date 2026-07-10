@@ -1,4 +1,9 @@
 import type { AlignX, AlignY, PlateMode } from '../geometry/calculateGrid'
+import {
+  ALIGNMENT_PRESETS,
+  alignmentFromPreset,
+  presetFromAlignment,
+} from '../geometry/alignmentPresets'
 import type { Unit } from '../geometry/units'
 
 export interface ControlsProps {
@@ -14,8 +19,21 @@ export interface ControlsProps {
   onClearanceChange: (value: number) => void
   onUnitChange: (unit: Unit) => void
   onPlateModeChange: (mode: PlateMode) => void
-  onAlignXChange: (align: AlignX) => void
-  onAlignYChange: (align: AlignY) => void
+  onAlignChange: (alignX: AlignX, alignY: AlignY) => void
+}
+
+function ChevronIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <path
+        d="M4 6l4 4 4-4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
 }
 
 export function Controls({
@@ -31,165 +49,150 @@ export function Controls({
   onClearanceChange,
   onUnitChange,
   onPlateModeChange,
-  onAlignXChange,
-  onAlignYChange,
+  onAlignChange,
 }: ControlsProps) {
   const unitLabel = unit === 'mm' ? 'mm' : 'in'
+  const alignmentId = presetFromAlignment(alignX, alignY)
 
   return (
-    <section className="panel controls" aria-labelledby="controls-heading">
-      <h2 id="controls-heading">Drawer size</h2>
-
-      <div className="field-row">
-        <label htmlFor="unit">Units</label>
-        <div className="segmented" role="group" aria-label="Units">
-          <button
-            type="button"
-            className={unit === 'mm' ? 'active' : ''}
-            onClick={() => onUnitChange('mm')}
-          >
-            mm
-          </button>
-          <button
-            type="button"
-            className={unit === 'in' ? 'active' : ''}
-            onClick={() => onUnitChange('in')}
-          >
-            inches
-          </button>
-        </div>
-      </div>
-
-      <div className="field-grid">
-        <div className="field">
-          <label htmlFor="width">Width ({unitLabel})</label>
-          <input
-            id="width"
-            type="number"
-            min={0}
-            step="any"
-            value={width}
-            onChange={(e) => onWidthChange(Number(e.target.value))}
-          />
-        </div>
-        <div className="field">
-          <label htmlFor="depth">Depth ({unitLabel})</label>
-          <input
-            id="depth"
-            type="number"
-            min={0}
-            step="any"
-            value={depth}
-            onChange={(e) => onDepthChange(Number(e.target.value))}
-          />
-        </div>
-        <div className="field">
-          <label htmlFor="clearance">Edge clearance per side ({unitLabel})</label>
-          <input
-            id="clearance"
-            type="number"
-            min={0}
-            step="any"
-            value={clearance}
-            onChange={(e) => onClearanceChange(Number(e.target.value))}
-          />
-        </div>
-      </div>
-
-      <fieldset className="plate-mode">
-        <legend>Plate outline</legend>
-        <label className="radio">
-          <input
-            type="radio"
-            name="plateMode"
-            value="drawer"
-            checked={plateMode === 'drawer'}
-            onChange={() => onPlateModeChange('drawer')}
-          />
-          <span>
-            <strong>Drawer size</strong>
-            <small>
-              Outer plate fills usable drawer dimensions; align the grid below.
-            </small>
-          </span>
-        </label>
-        <label className="radio">
-          <input
-            type="radio"
-            name="plateMode"
-            value="grid"
-            checked={plateMode === 'grid'}
-            onChange={() => onPlateModeChange('grid')}
-          />
-          <span>
-            <strong>Grid only</strong>
-            <small>Outer plate matches the exact Gridfinity grid size.</small>
-          </span>
-        </label>
-      </fieldset>
-
-      {plateMode === 'drawer' && (
-        <fieldset className="alignment">
-          <legend>Grid alignment</legend>
-          <p className="hint">
-            Preview is top-down: back is at the top, front at the bottom.
-          </p>
-
-          <div className="field-row">
-            <label>Width</label>
-            <div className="segmented segmented-3" role="group" aria-label="Width alignment">
+    <>
+      <section className="sidebar-section" aria-labelledby="dims-heading">
+        <h2 id="dims-heading" className="section-label">
+          Workspace Dimensions
+        </h2>
+        <div className="section-content">
+          <div className="field">
+            <label className="field-label" htmlFor="unit">
+              Units
+            </label>
+            <div className="segmented" role="group" aria-label="Units">
               <button
                 type="button"
-                className={alignX === 'left' ? 'active' : ''}
-                onClick={() => onAlignXChange('left')}
+                className={unit === 'mm' ? 'active' : ''}
+                onClick={() => onUnitChange('mm')}
               >
-                Left
+                mm
               </button>
               <button
                 type="button"
-                className={alignX === 'center' ? 'active' : ''}
-                onClick={() => onAlignXChange('center')}
+                className={unit === 'in' ? 'active' : ''}
+                onClick={() => onUnitChange('in')}
               >
-                Center
-              </button>
-              <button
-                type="button"
-                className={alignX === 'right' ? 'active' : ''}
-                onClick={() => onAlignXChange('right')}
-              >
-                Right
+                inches
               </button>
             </div>
           </div>
 
-          <div className="field-row">
-            <label>Depth</label>
-            <div className="segmented segmented-3" role="group" aria-label="Depth alignment">
+          <div className="field">
+            <label className="field-label" htmlFor="width">
+              Width
+            </label>
+            <div className="input-box">
+              <input
+                id="width"
+                type="number"
+                min={0}
+                step="any"
+                value={width}
+                onChange={(e) => onWidthChange(Number(e.target.value))}
+              />
+              <span className="input-suffix">{unitLabel}</span>
+            </div>
+          </div>
+
+          <div className="field">
+            <label className="field-label" htmlFor="depth">
+              Height
+            </label>
+            <div className="input-box">
+              <input
+                id="depth"
+                type="number"
+                min={0}
+                step="any"
+                value={depth}
+                onChange={(e) => onDepthChange(Number(e.target.value))}
+              />
+              <span className="input-suffix">{unitLabel}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="sidebar-section" aria-labelledby="settings-heading">
+        <h2 id="settings-heading" className="section-label">
+          Grid Settings
+        </h2>
+        <div className="section-content">
+          <div className="field">
+            <label className="field-label" htmlFor="clearance">
+              Margins
+            </label>
+            <div className="input-box">
+              <input
+                id="clearance"
+                type="number"
+                min={0}
+                step="any"
+                value={clearance}
+                onChange={(e) => onClearanceChange(Number(e.target.value))}
+              />
+              <span className="input-suffix">{unitLabel}</span>
+            </div>
+          </div>
+
+          <div className="field">
+            <label className="field-label" htmlFor="plateMode">
+              Plate outline
+            </label>
+            <div className="segmented" role="group" aria-label="Plate outline">
               <button
                 type="button"
-                className={alignY === 'front' ? 'active' : ''}
-                onClick={() => onAlignYChange('front')}
+                className={plateMode === 'drawer' ? 'active' : ''}
+                onClick={() => onPlateModeChange('drawer')}
               >
-                Front
+                Drawer
               </button>
               <button
                 type="button"
-                className={alignY === 'center' ? 'active' : ''}
-                onClick={() => onAlignYChange('center')}
+                className={plateMode === 'grid' ? 'active' : ''}
+                onClick={() => onPlateModeChange('grid')}
               >
-                Center
-              </button>
-              <button
-                type="button"
-                className={alignY === 'back' ? 'active' : ''}
-                onClick={() => onAlignYChange('back')}
-              >
-                Back
+                Grid only
               </button>
             </div>
           </div>
-        </fieldset>
-      )}
-    </section>
+
+          {plateMode === 'drawer' && (
+            <div className="field">
+              <label className="field-label" htmlFor="alignment">
+                Grid Alignment
+              </label>
+              <div className="select-wrap">
+                <div className="input-box">
+                  <select
+                    id="alignment"
+                    value={alignmentId}
+                    onChange={(e) => {
+                      const next = alignmentFromPreset(e.target.value)
+                      onAlignChange(next.alignX, next.alignY)
+                    }}
+                  >
+                    {ALIGNMENT_PRESETS.map((preset) => (
+                      <option key={preset.id} value={preset.id}>
+                        {preset.label}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="chevron">
+                    <ChevronIcon />
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+    </>
   )
 }

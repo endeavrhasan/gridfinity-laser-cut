@@ -9,68 +9,56 @@ export interface ResultsProps {
 export function Results({ layout, unit }: ResultsProps) {
   if (layout.cells === 0) {
     return (
-      <section className="panel results" aria-labelledby="results-heading">
-        <h2 id="results-heading">Results</h2>
+      <section className="sidebar-section" aria-labelledby="info-heading">
+        <h2 id="info-heading" className="section-label">
+          Grid Info
+        </h2>
         <p className="empty">
           No complete Gridfinity cells fit. Increase the drawer size or reduce
-          clearance.
+          margins.
         </p>
       </section>
     )
   }
 
   return (
-    <section className="panel results" aria-labelledby="results-heading">
-      <h2 id="results-heading">Results</h2>
+    <section className="sidebar-section" aria-labelledby="info-heading">
+      <h2 id="info-heading" className="section-label">
+        Grid Info
+      </h2>
       <dl className="metrics">
-        <div>
-          <dt>Columns</dt>
-          <dd>{layout.columns}</dd>
+        <div className="info-row">
+          <dt>Grid Units</dt>
+          <dd>
+            {layout.columns} × {layout.rows}
+          </dd>
         </div>
-        <div>
-          <dt>Rows</dt>
-          <dd>{layout.rows}</dd>
+        <div className="info-row">
+          <dt>Baseplate Width</dt>
+          <dd>{formatLength(layout.plateWidthMm, unit)}</dd>
         </div>
-        <div>
+        <div className="info-row">
+          <dt>Baseplate Height</dt>
+          <dd>{formatLength(layout.plateDepthMm, unit)}</dd>
+        </div>
+        <div className="info-row">
+          <dt>X Margin</dt>
+          <dd>{formatLength(layout.marginLeftMm, unit)}</dd>
+        </div>
+        <div className="info-row">
+          <dt>Y Margin</dt>
+          <dd>{formatLength(layout.marginTopMm, unit)}</dd>
+        </div>
+        <div className="info-row">
           <dt>Total cells</dt>
           <dd>{layout.cells}</dd>
         </div>
-        <div>
+        <div className="info-row">
           <dt>Grid size</dt>
           <dd>
             {formatLength(layout.gridWidthMm, unit)} ×{' '}
             {formatLength(layout.gridDepthMm, unit)}
           </dd>
-        </div>
-        <div>
-          <dt>Plate size</dt>
-          <dd>
-            {formatLength(layout.plateWidthMm, unit)} ×{' '}
-            {formatLength(layout.plateDepthMm, unit)}
-          </dd>
-        </div>
-        <div>
-          <dt>Unused space</dt>
-          <dd>
-            {formatLength(layout.unusedWidthMm, unit)} ×{' '}
-            {formatLength(layout.unusedDepthMm, unit)}
-          </dd>
-        </div>
-        <div>
-          <dt>Left margin</dt>
-          <dd>{formatLength(layout.marginLeftMm, unit)}</dd>
-        </div>
-        <div>
-          <dt>Right margin</dt>
-          <dd>{formatLength(layout.marginRightMm, unit)}</dd>
-        </div>
-        <div>
-          <dt>Back margin</dt>
-          <dd>{formatLength(layout.marginTopMm, unit)}</dd>
-        </div>
-        <div>
-          <dt>Front margin</dt>
-          <dd>{formatLength(layout.marginBottomMm, unit)}</dd>
         </div>
       </dl>
     </section>

@@ -114,4 +114,58 @@ describe('calculateGrid', () => {
     expect(layout.offsetXMm).toBe(0)
     expect(layout.offsetYMm).toBe(0)
   })
+
+  it('aligns to left and back (top of SVG)', () => {
+    const layout = calculateGrid({
+      widthMm: 510,
+      depthMm: 375,
+      clearanceMm: 0,
+      plateMode: 'drawer',
+      alignX: 'left',
+      alignY: 'back',
+    })
+
+    expect(layout.offsetXMm).toBe(0)
+    expect(layout.offsetYMm).toBe(0)
+    expect(layout.marginLeftMm).toBe(0)
+    expect(layout.marginRightMm).toBe(6)
+    expect(layout.marginTopMm).toBe(0)
+    expect(layout.marginBottomMm).toBe(39)
+  })
+
+  it('aligns to right and front (bottom of SVG)', () => {
+    const layout = calculateGrid({
+      widthMm: 510,
+      depthMm: 375,
+      clearanceMm: 0,
+      plateMode: 'drawer',
+      alignX: 'right',
+      alignY: 'front',
+    })
+
+    expect(layout.offsetXMm).toBe(6)
+    expect(layout.offsetYMm).toBe(39)
+    expect(layout.marginLeftMm).toBe(6)
+    expect(layout.marginRightMm).toBe(0)
+    expect(layout.marginTopMm).toBe(39)
+    expect(layout.marginBottomMm).toBe(0)
+  })
+
+  it('ignores alignment in grid-only mode', () => {
+    const layout = calculateGrid({
+      widthMm: 510,
+      depthMm: 375,
+      clearanceMm: 0,
+      plateMode: 'grid',
+      alignX: 'right',
+      alignY: 'front',
+    })
+
+    expect(layout.offsetXMm).toBe(0)
+    expect(layout.offsetYMm).toBe(0)
+    expect(layout.marginLeftMm).toBe(0)
+    expect(layout.marginRightMm).toBe(0)
+    expect(layout.marginTopMm).toBe(0)
+    expect(layout.marginBottomMm).toBe(0)
+  })
 })

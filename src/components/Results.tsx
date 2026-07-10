@@ -57,16 +57,20 @@ export function Results({ layout, unit }: ResultsProps) {
           </dd>
         </div>
         <div>
-          <dt>Horizontal margins</dt>
-          <dd>
-            {formatLength(layout.marginLeftMm, unit)} each side
-          </dd>
+          <dt>Left margin</dt>
+          <dd>{formatLength(layout.marginLeftMm, unit)}</dd>
         </div>
         <div>
-          <dt>Vertical margins</dt>
-          <dd>
-            {formatLength(layout.marginTopMm, unit)} each side
-          </dd>
+          <dt>Right margin</dt>
+          <dd>{formatLength(layout.marginRightMm, unit)}</dd>
+        </div>
+        <div>
+          <dt>Back margin</dt>
+          <dd>{formatLength(layout.marginTopMm, unit)}</dd>
+        </div>
+        <div>
+          <dt>Front margin</dt>
+          <dd>{formatLength(layout.marginBottomMm, unit)}</dd>
         </div>
       </dl>
     </section>

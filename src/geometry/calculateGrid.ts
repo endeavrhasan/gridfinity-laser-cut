@@ -5,6 +5,8 @@ import {
 } from './constants'
 
 export type PlateMode = 'drawer' | 'grid'
+export type AlignX = 'left' | 'center' | 'right'
+export type AlignY = 'front' | 'center' | 'back'
 
 export interface CalculateGridInput {
   /** Drawer / space width in millimetres. */
@@ -14,6 +16,10 @@ export interface CalculateGridInput {
   /** Edge clearance per side in millimetres. */
   clearanceMm: number
   plateMode: PlateMode
+  /** Horizontal grid alignment within the plate (drawer mode). */
+  alignX?: AlignX
+  /** Depth grid alignment within the plate (drawer mode). Front = bottom of SVG. */
+  alignY?: AlignY
 }
 
 export interface Cutout {
@@ -42,9 +48,20 @@ export interface GridLayout {
   cutouts: Cutout[]
 }
 
+function offsetAlongAxis(
+  unused: number,
+  align: 'start' | 'center' | 'end',
+): number {
+  if (align === 'start') return 0
+  if (align === 'end') return unused
+  return unused / 2
+}
+
 /**
  * Calculate the maximum complete Gridfinity grid that fits the usable drawer
  * area, and the plate/cutout layout for SVG generation. All values in mm.
+ *
+ * Preview convention (top-down): top of SVG = back of drawer, bottom = front.
  */
 export function calculateGrid(input: CalculateGridInput): GridLayout {
   const clearance = Math.max(0, input.clearanceMm)
@@ -61,13 +78,28 @@ export function calculateGrid(input: CalculateGridInput): GridLayout {
   const plateWidthMm = input.plateMode === 'drawer' ? usableW : gridWidthMm
   const plateDepthMm = input.plateMode === 'drawer' ? usableD : gridDepthMm
 
-  const offsetXMm =
-    input.plateMode === 'drawer' ? (plateWidthMm - gridWidthMm) / 2 : 0
-  const offsetYMm =
-    input.plateMode === 'drawer' ? (plateDepthMm - gridDepthMm) / 2 : 0
-
   const unusedWidthMm = plateWidthMm - gridWidthMm
   const unusedDepthMm = plateDepthMm - gridDepthMm
+
+  const alignX = input.alignX ?? 'center'
+  const alignY = input.alignY ?? 'center'
+
+  const offsetXMm =
+    input.plateMode === 'drawer'
+      ? offsetAlongAxis(
+          unusedWidthMm,
+          alignX === 'left' ? 'start' : alignX === 'right' ? 'end' : 'center',
+        )
+      : 0
+
+  // Y grows downward; back is the top of the SVG.
+  const offsetYMm =
+    input.plateMode === 'drawer'
+      ? offsetAlongAxis(
+          unusedDepthMm,
+          alignY === 'back' ? 'start' : alignY === 'front' ? 'end' : 'center',
+        )
+      : 0
 
   const inset = (GRID_PITCH_MM - CUTOUT_SIZE_MM) / 2
   const cutouts: Cutout[] = []
@@ -96,9 +128,9 @@ export function calculateGrid(input: CalculateGridInput): GridLayout {
     unusedWidthMm,
     unusedDepthMm,
     marginLeftMm: offsetXMm,
-    marginRightMm: offsetXMm,
+    marginRightMm: unusedWidthMm - offsetXMm,
     marginTopMm: offsetYMm,
-    marginBottomMm: offsetYMm,
+    marginBottomMm: unusedDepthMm - offsetYMm,
     cutouts,
   }
 }

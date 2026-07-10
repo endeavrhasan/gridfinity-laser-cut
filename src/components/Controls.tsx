@@ -1,4 +1,4 @@
-import type { PlateMode } from '../geometry/calculateGrid'
+import type { AlignX, AlignY, PlateMode } from '../geometry/calculateGrid'
 import type { Unit } from '../geometry/units'
 
 export interface ControlsProps {
@@ -7,11 +7,15 @@ export interface ControlsProps {
   clearance: number
   unit: Unit
   plateMode: PlateMode
+  alignX: AlignX
+  alignY: AlignY
   onWidthChange: (value: number) => void
   onDepthChange: (value: number) => void
   onClearanceChange: (value: number) => void
   onUnitChange: (unit: Unit) => void
   onPlateModeChange: (mode: PlateMode) => void
+  onAlignXChange: (align: AlignX) => void
+  onAlignYChange: (align: AlignY) => void
 }
 
 export function Controls({
@@ -20,11 +24,15 @@ export function Controls({
   clearance,
   unit,
   plateMode,
+  alignX,
+  alignY,
   onWidthChange,
   onDepthChange,
   onClearanceChange,
   onUnitChange,
   onPlateModeChange,
+  onAlignXChange,
+  onAlignYChange,
 }: ControlsProps) {
   const unitLabel = unit === 'mm' ? 'mm' : 'in'
 
@@ -100,7 +108,9 @@ export function Controls({
           />
           <span>
             <strong>Drawer size</strong>
-            <small>Outer plate fills usable drawer dimensions; grid is centred.</small>
+            <small>
+              Outer plate fills usable drawer dimensions; align the grid below.
+            </small>
           </span>
         </label>
         <label className="radio">
@@ -117,6 +127,69 @@ export function Controls({
           </span>
         </label>
       </fieldset>
+
+      {plateMode === 'drawer' && (
+        <fieldset className="alignment">
+          <legend>Grid alignment</legend>
+          <p className="hint">
+            Preview is top-down: back is at the top, front at the bottom.
+          </p>
+
+          <div className="field-row">
+            <label>Width</label>
+            <div className="segmented segmented-3" role="group" aria-label="Width alignment">
+              <button
+                type="button"
+                className={alignX === 'left' ? 'active' : ''}
+                onClick={() => onAlignXChange('left')}
+              >
+                Left
+              </button>
+              <button
+                type="button"
+                className={alignX === 'center' ? 'active' : ''}
+                onClick={() => onAlignXChange('center')}
+              >
+                Center
+              </button>
+              <button
+                type="button"
+                className={alignX === 'right' ? 'active' : ''}
+                onClick={() => onAlignXChange('right')}
+              >
+                Right
+              </button>
+            </div>
+          </div>
+
+          <div className="field-row">
+            <label>Depth</label>
+            <div className="segmented segmented-3" role="group" aria-label="Depth alignment">
+              <button
+                type="button"
+                className={alignY === 'front' ? 'active' : ''}
+                onClick={() => onAlignYChange('front')}
+              >
+                Front
+              </button>
+              <button
+                type="button"
+                className={alignY === 'center' ? 'active' : ''}
+                onClick={() => onAlignYChange('center')}
+              >
+                Center
+              </button>
+              <button
+                type="button"
+                className={alignY === 'back' ? 'active' : ''}
+                onClick={() => onAlignYChange('back')}
+              >
+                Back
+              </button>
+            </div>
+          </div>
+        </fieldset>
+      )}
     </section>
   )
 }

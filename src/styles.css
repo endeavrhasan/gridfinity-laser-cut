@@ -1,0 +1,262 @@
+:root {
+  --bg: #f3efe6;
+  --bg-accent: #e7dfd0;
+  --ink: #1c1a17;
+  --muted: #5c564c;
+  --panel: #fffcf7;
+  --line: #d2c8b6;
+  --accent: #0f6b5c;
+  --accent-ink: #ffffff;
+  --danger: #8a3b2b;
+  --radius: 10px;
+  --shadow: 0 10px 30px rgba(28, 26, 23, 0.06);
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  line-height: 1.45;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, #fff8ea 0%, transparent 40%),
+    linear-gradient(160deg, var(--bg), var(--bg-accent));
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 2.5rem;
+}
+
+.header h1 {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  letter-spacing: -0.02em;
+}
+
+.header p {
+  margin: 0;
+  color: var(--muted);
+  max-width: 40rem;
+}
+
+.layout {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 860px) {
+  .layout {
+    grid-template-columns: minmax(280px, 360px) 1fr;
+    align-items: start;
+  }
+}
+
+.sidebar {
+  display: grid;
+  gap: 1rem;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem 1.1rem 1.15rem;
+}
+
+.panel h2 {
+  margin: 0 0 0.85rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.field-grid {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.field,
+.field-row {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.field-row {
+  margin-bottom: 0.9rem;
+}
+
+label,
+legend {
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+
+input[type='number'] {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  font: inherit;
+  background: #fff;
+  color: var(--ink);
+}
+
+input[type='number']:focus {
+  outline: 2px solid color-mix(in srgb, var(--accent) 45%, white);
+  border-color: var(--accent);
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+}
+
+.segmented button {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.segmented button.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.plate-mode {
+  margin: 1rem 0 0;
+  padding: 0.85rem 0 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.plate-mode legend {
+  padding: 0;
+  margin-bottom: 0.65rem;
+  font-weight: 600;
+}
+
+.radio {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.65rem;
+  align-items: start;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+}
+
+.radio:last-child {
+  margin-bottom: 0;
+}
+
+.radio small {
+  display: block;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.metrics {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+}
+
+.metrics > div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.metrics > div:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.metrics dt {
+  margin: 0;
+  color: var(--muted);
+}
+
+.metrics dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  font-weight: 600;
+}
+
+.empty {
+  margin: 0;
+  color: var(--danger);
+}
+
+.download {
+  width: 100%;
+  border: 0;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  font: inherit;
+  font-weight: 600;
+  background: var(--accent);
+  color: var(--accent-ink);
+  cursor: pointer;
+}
+
+.download:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.download:not(:disabled):hover {
+  filter: brightness(1.05);
+}
+
+.preview {
+  min-height: 320px;
+}
+
+.svg-frame {
+  width: 100%;
+  overflow: auto;
+  background:
+    linear-gradient(45deg, #eee8dc 25%, transparent 25%),
+    linear-gradient(-45deg, #eee8dc 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #eee8dc 75%),
+    linear-gradient(-45deg, transparent 75%, #eee8dc 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+  background-color: #f7f3ea;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.svg-frame svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 70vh;
+  background: #fff;
+}

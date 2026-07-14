@@ -19,11 +19,6 @@
   --radius-sm: 4px;
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-  --align-widget-bg: #18181b;
-  --align-widget-border: #27272a;
-  --align-widget-shadow: none;
-  --align-dot: #3f3f46;
-  --align-dot-selected: #ffffff;
 }
 
 [data-theme='light'] {
@@ -41,11 +36,6 @@
   --accent-ink: #ffffff;
   --danger: #dc2626;
   --dot: rgba(24, 24, 27, 0.12);
-  --align-widget-bg: #ffffff;
-  --align-widget-border: #e2e8f0;
-  --align-widget-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-  --align-dot: #cbd5e1;
-  --align-dot-selected: #18181b;
 }
 
 * {
@@ -323,23 +313,17 @@ select {
   color: var(--accent-ink);
 }
 
-.alignment-field {
-  align-items: center;
-  gap: 12px;
-}
-
 .alignment-picker {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  width: 80px;
-  height: 80px;
-  padding: 12px;
+  width: 108px;
+  height: 108px;
+  padding: 6px;
   box-sizing: border-box;
-  background: var(--align-widget-bg);
-  border: 1px solid var(--align-widget-border);
-  border-radius: 8px;
-  box-shadow: var(--align-widget-shadow);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
 }
 
 .alignment-cell {
@@ -353,12 +337,16 @@ select {
   border: 0;
   background: transparent;
   cursor: pointer;
-  border-radius: 2px;
+  border-radius: 3px;
+}
+
+.alignment-cell:hover .alignment-dot {
+  background: var(--text-secondary);
 }
 
 .alignment-cell:focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 1px;
+  outline-offset: -2px;
 }
 
 .alignment-dot {
@@ -366,18 +354,16 @@ select {
   width: 8px;
   height: 8px;
   border-radius: 1px;
-  background: var(--align-dot);
+  background: var(--border-strong);
+  transition: background 0.12s ease;
 }
 
 .alignment-cell.selected .alignment-dot {
-  background: var(--align-dot-selected);
+  background: var(--accent);
 }
 
-.alignment-label {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  text-align: center;
+.alignment-cell.selected:hover .alignment-dot {
+  background: var(--accent);
 }
 
 .info-row {

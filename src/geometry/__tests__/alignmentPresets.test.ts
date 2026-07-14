@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  ALIGNMENT_GRID,
   alignmentFromPreset,
   presetFromAlignment,
 } from '../alignmentPresets'
@@ -19,5 +20,19 @@ describe('alignmentPresets', () => {
       alignY: 'front',
     })
     expect(presetFromAlignment('right', 'back')).toBe('back-right')
+  })
+
+  it('orders the 3x3 grid with back on top and front on bottom', () => {
+    expect(ALIGNMENT_GRID.map((preset) => preset.id)).toEqual([
+      'back-left',
+      'back',
+      'back-right',
+      'left',
+      'centered',
+      'right',
+      'front-left',
+      'front',
+      'front-right',
+    ])
   })
 })

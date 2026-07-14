@@ -1,7 +1,6 @@
 import type { AlignX, AlignY, PlateMode } from '../geometry/calculateGrid'
 import {
-  ALIGNMENT_PRESETS,
-  alignmentFromPreset,
+  ALIGNMENT_GRID,
   presetFromAlignment,
 } from '../geometry/alignmentPresets'
 import type { Unit } from '../geometry/units'
@@ -20,20 +19,6 @@ export interface ControlsProps {
   onUnitChange: (unit: Unit) => void
   onPlateModeChange: (mode: PlateMode) => void
   onAlignChange: (alignX: AlignX, alignY: AlignY) => void
-}
-
-function ChevronIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <path
-        d="M4 6l4 4 4-4"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
 }
 
 export function Controls({
@@ -164,31 +149,36 @@ export function Controls({
           </div>
 
           {plateMode === 'drawer' && (
-            <div className="field">
-              <label className="field-label" htmlFor="alignment">
-                Grid Alignment
-              </label>
-              <div className="select-wrap">
-                <div className="input-box">
-                  <select
-                    id="alignment"
-                    value={alignmentId}
-                    onChange={(e) => {
-                      const next = alignmentFromPreset(e.target.value)
-                      onAlignChange(next.alignX, next.alignY)
-                    }}
-                  >
-                    {ALIGNMENT_PRESETS.map((preset) => (
-                      <option key={preset.id} value={preset.id}>
-                        {preset.label}
-                      </option>
-                    ))}
-                  </select>
-                  <span className="chevron">
-                    <ChevronIcon />
-                  </span>
-                </div>
+            <div className="field alignment-field">
+              <div
+                className="alignment-picker"
+                role="radiogroup"
+                aria-label="Alignment"
+              >
+                {ALIGNMENT_GRID.map((preset) => {
+                  const selected = preset.id === alignmentId
+                  return (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      role="radio"
+                      aria-checked={selected}
+                      aria-label={preset.label}
+                      className={
+                        selected
+                          ? 'alignment-cell selected'
+                          : 'alignment-cell'
+                      }
+                      onClick={() =>
+                        onAlignChange(preset.alignX, preset.alignY)
+                      }
+                    >
+                      <span className="alignment-dot" />
+                    </button>
+                  )
+                })}
               </div>
+              <span className="alignment-label">Alignment</span>
             </div>
           )}
         </div>

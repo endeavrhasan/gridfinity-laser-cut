@@ -149,11 +149,14 @@ export function Controls({
           </div>
 
           {plateMode === 'drawer' && (
-            <div className="field alignment-field">
+            <div className="field">
+              <span className="field-label" id="alignment-label">
+                Alignment
+              </span>
               <div
                 className="alignment-picker"
                 role="radiogroup"
-                aria-label="Alignment"
+                aria-labelledby="alignment-label"
               >
                 {ALIGNMENT_GRID.map((preset) => {
                   const selected = preset.id === alignmentId
@@ -178,7 +181,6 @@ export function Controls({
                   )
                 })}
               </div>
-              <span className="alignment-label">Alignment</span>
             </div>
           )}
         </div>
